@@ -12,8 +12,10 @@ public class Dictionary {
 
     static {
         DICTIONARY = new HashMap<>();
-        Stream.of(Operations.values()).forEach(element -> DICTIONARY.put(element.name(), String.valueOf(element.getOperation())));
-        Stream.of(Numbers.values()).forEach(element -> DICTIONARY.put(element.name(), String.valueOf(element.getNumericEquivalent())));
+        Stream.of(Operations.values()).forEach(element -> DICTIONARY.put(element.name(),
+                String.valueOf(element.getOperation())));
+        Stream.of(Numbers.values()).forEach(element -> DICTIONARY.put(element.name(),
+                String.valueOf(element.getNumericEquivalent())));
     }
 
     public static Map<String, String> getDictionary() {

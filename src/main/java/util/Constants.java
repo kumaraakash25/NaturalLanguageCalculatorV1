@@ -16,4 +16,9 @@ public class Constants {
 
     public static final String SEPARATOR = " ";
 
+    public static final String ROW_HEADING1= "ENTERED_EXPRESSION";
+
+    public static final String ROW_HEADING2= "MATH_EXPRESSION";
+
+    public static final String ROW_HEADING3= "RESULT";
 }

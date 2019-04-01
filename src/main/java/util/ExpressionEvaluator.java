@@ -9,14 +9,14 @@ import static util.Constants.*;
  */
 public class ExpressionEvaluator {
 
+    /**
+     * Computes the mathematical result given an input of mathematical expression.
+     */
     public static double evaluate(final String expression) {
-        if(expression.contains("null")){
-            throw new IllegalArgumentException("No matching number or operator found for input");
-        }
-        final char[] tokens = expression.toCharArray();
-        final Stack<Float> NUMERIC_STACK = new Stack<>();
-        final Stack<Character> OPERATION_STACK = new Stack<>();
+        final Stack<Float> numericStack = new Stack<>();
+        final Stack<Character> operatorStack = new Stack<>();
 
+        final char[] tokens = expression.toCharArray();
         for (int count = 0; count < tokens.length; count++) {
             if (tokens[count] == ' ') {
                 continue;
@@ -27,43 +27,34 @@ public class ExpressionEvaluator {
                 while (count < tokens.length && tokens[count] >= ZERO && tokens[count] <= NINE) {
                     buffer.append(tokens[count++]);
                 }
-                NUMERIC_STACK.push(Float.parseFloat(buffer.toString()));
+                numericStack.push(Float.parseFloat(buffer.toString()));
                 // If operation token
             } else if (tokens[count] == ADD_OPERATOR || tokens[count] == SUBTRACT_OPERATOR || tokens[count] == MULTIPLY_OPERATOR
                     || tokens[count] == DIVIDE_OPERATOR) {
-                computingNumericStackAsPerOperatorPrecedence(tokens[count], NUMERIC_STACK, OPERATION_STACK);
+                computeStack(tokens[count], numericStack, operatorStack);
             }
         }
-        while (!OPERATION_STACK.empty()) {
-            NUMERIC_STACK.push(performOperation(OPERATION_STACK.pop(), NUMERIC_STACK.pop(), NUMERIC_STACK.pop()));
+        while (!operatorStack.empty()) {
+            numericStack.push(performOperation(operatorStack.pop(), numericStack.pop(), numericStack.pop()));
         }
-        final float expressionResult = NUMERIC_STACK.pop();
-        return Math.round(expressionResult * 100.0) / 100.0;
+        final double expressionResult = roundOff(numericStack.pop());
+        return expressionResult;
     }
 
     /**
-     * While adding a new operator in the OPERATION_STACK the method checks if the current operator has higher
-     * precedence than the last added operators in the OPERATION_STACK
-     *
-     * @param token
-     * @param NUMERIC_STACK
-     * @param OPERATION_STACK
+     * While adding a new operator in the stack checks if the current operator has higher
+     * precedence than the last added operators
      */
-    private static void computingNumericStackAsPerOperatorPrecedence(char token, final Stack<Float> NUMERIC_STACK,
-                                                                     final Stack<Character> OPERATION_STACK) {
-        while (!OPERATION_STACK.empty() && hasPrecedence(token, OPERATION_STACK.peek())) {
-            NUMERIC_STACK.push(performOperation(OPERATION_STACK.pop(), NUMERIC_STACK.pop(), NUMERIC_STACK.pop()));
+    private static void computeStack(char token, final Stack<Float> numericStack,
+                                     final Stack<Character> operatorStack) {
+        while (!operatorStack.empty() && hasPrecedence(token, operatorStack.peek())) {
+            numericStack.push(performOperation(operatorStack.pop(), numericStack.pop(), numericStack.pop()));
         }
-        OPERATION_STACK.push(token);
+        operatorStack.push(token);
     }
 
     /**
-     * Performs teh mathematics operation on the input values
-     *
-     * @param operation
-     * @param num1
-     * @param num2
-     * @return
+     * Performs mathematics operation on the input values.
      */
     private static float performOperation(final char operation, final float num1, final float num2) {
         switch (operation) {
@@ -82,11 +73,7 @@ public class ExpressionEvaluator {
     }
 
     /**
-     * Checks the precendence for the operator.
-     *
-     * @param operation1
-     * @param operation2
-     * @return
+     * Checks the precedence of the operator.
      */
     private static boolean hasPrecedence(final char operation1, final char operation2) {
         if ((operation1 == MULTIPLY_OPERATOR || operation1 == DIVIDE_OPERATOR) && (operation2 == ADD_OPERATOR ||
@@ -94,5 +81,12 @@ public class ExpressionEvaluator {
             return false;
         else
             return true;
+    }
+
+    /**
+     * Round off the final result nearest to two decimal places.
+     */
+    private static double roundOff(final Float plainResult) {
+        return Math.round(plainResult * 100.0) / 100.0;
     }
 }
