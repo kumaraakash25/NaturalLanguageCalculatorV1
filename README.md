@@ -11,7 +11,5 @@ Unit tests are added to test the functionality
 Sample run 
 ######## Enter the expression ########
 nine minus three times seven
-######## You have entered : nine minus three times seven
-######## Mathematical expression for the input : 9 - 3 * 7
-######## Result from the expression evaluation  : -12.0
-######## ######## ######## ########
+|ENTERED_EXPRESSION          |MATH_EXPRESSION             |RESULT                      |
+|nine minus three times seven|9 - 3 * 7                   |-12.0                       |
