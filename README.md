@@ -8,8 +8,8 @@ The program evaluates and prints the result in the next line and terminates
 In case of any invalid input an exception would be thrown. 
 Unit tests are added to test the functionality 
 
-Sample run 
-######## Enter the expression ########
-nine minus three times seven
-|ENTERED_EXPRESSION          |MATH_EXPRESSION             |RESULT                      |
+Sample run /n
+######## Enter the expression ########/n
+nine minus three times seven/n
+|ENTERED_EXPRESSION          |MATH_EXPRESSION             |RESULT                      |/n
 |nine minus three times seven|9 - 3 * 7                   |-12.0                       |
